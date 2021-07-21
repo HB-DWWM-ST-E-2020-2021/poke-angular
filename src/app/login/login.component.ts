@@ -28,6 +28,10 @@ export class LoginComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    // If the JWT already exist, redirect to home (prevent display login form).
+    if (localStorage.getItem('access_token')) {
+      this.router.navigate(['']);
+    }
   }
 
   submit(): void {
