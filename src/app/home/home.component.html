@@ -1,3 +1,11 @@
+<button type="button" *ngIf="canLogout()" (click)="logout()">
+  Logout
+</button>
+
+<a [routerLink]="['login']" *ngIf="!canLogout()">
+  Go to Login
+</a>
+
 <ul>
   <li *ngFor="let poke of pokemon">
     {{ poke.name }}

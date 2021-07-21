@@ -4,6 +4,7 @@ import {Router} from '@angular/router';
 import {Token} from './token';
 import {Credentials} from './credentials';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {AuthenticationService} from '../api/authentication.service';
 
 @Component({
   selector: 'app-login',
@@ -24,12 +25,13 @@ export class LoginComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private httpClient: HttpClient,
+    private authenticationService: AuthenticationService,
     private router: Router,
   ) { }
 
   ngOnInit(): void {
     // If the JWT already exist, redirect to home (prevent display login form).
-    if (localStorage.getItem('access_token')) {
+    if (this.authenticationService.hasToken()) {
       this.router.navigate(['']);
     }
   }
@@ -44,7 +46,7 @@ export class LoginComponent implements OnInit {
       this.httpClient.post<Token>('https://localhost:8000/authentication_token', this.form.value as Credentials).subscribe(
         (data) => {
           // When success. Save the JWT in local storage.
-          localStorage.setItem('access_token', data.token);
+          this.authenticationService.saveToken(data.token);
 
           // Then redirect Angular page to home.
           this.router.navigate(['']);
