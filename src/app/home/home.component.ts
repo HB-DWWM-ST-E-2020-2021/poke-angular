@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {PokemonApiService} from '../api/pokemon-api.service';
+import {PokemonLite} from '../api/models/pokemon-lite';
 
 @Component({
   selector: 'app-home',
@@ -7,17 +8,20 @@ import {HttpClient} from '@angular/common/http';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-
-  public pokemon: Array<any> = [];
+  public pokemon: Array<PokemonLite> = [];
 
   constructor(
-    private httpClient: HttpClient,
+    private pokemonApi: PokemonApiService,
   ) { }
 
   ngOnInit(): void {
-    this.httpClient.get('https://localhost:8000/api/pokemon').subscribe((data: any) => {
-      this.pokemon = data['hydra:member'];
-    });
+    this.pokemonApi.getCollection().subscribe(
+      (data) => {
+        this.pokemon = data['hydra:member'];
+      },
+      () => {
+        alert('Cannot load Pokemon');
+      },
+    );
   }
-
 }
