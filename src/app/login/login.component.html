@@ -1,29 +1,43 @@
-<div>
-  <label for="email">
-    E-mail
-  </label>
-  <input id="email"
-         type="email"
-         placeholder="your@email.fr"
-         required
-         [(ngModel)]="email"
-  >
-</div>
 
-<div>
-  <label for="password">
-    Password
-  </label>
-  <input
-    id="password"
-    type="password"
-    placeholder="Password"
-    required
-    [(ngModel)]="password"
-  >
-</div>
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <div>
+    <label for="email">
+      E-mail
+    </label>
+    <input id="email"
+           type="email"
+           placeholder="your@email.fr"
+           formControlName="email"
+    >
 
-<button type="submit" (click)="submit()">
-  Log in
-</button>
+    <ul *ngIf="form.controls.email.touched && !form.controls.email.valid">
+      <li *ngIf="form.controls.email.hasError('required')">
+        Required
+      </li>
+      <li *ngIf="form.controls.email.hasError('email')">
+        Not a valid email
+      </li>
+    </ul>
+  </div>
 
+  <div>
+    <label for="password">
+      Password
+    </label>
+    <input id="password"
+           type="password"
+           placeholder="Password"
+           formControlName="password"
+    >
+
+    <ul *ngIf="form.controls.password.touched && !form.controls.password.valid">
+      <li *ngIf="form.controls.password.hasError('required')">
+        Required
+      </li>
+    </ul>
+  </div>
+
+  <button type="submit">
+    Log in
+  </button>
+</form>
